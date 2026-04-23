@@ -50,8 +50,8 @@ function rangeParser (size, str, options) {
       continue
     }
 
-    var startStr = arr[i].slice(0, indexOf).trim()
-    var endStr = arr[i].slice(indexOf + 1).trim()
+    var startStr = manualTrim(arr[i], 0, indexOf)
+    var endStr = manualTrim(arr[i], indexOf + 1, arr[i].length)
 
     var start = parsePos(startStr)
     var end = parsePos(endStr)
@@ -93,6 +93,29 @@ function rangeParser (size, str, options) {
   return options && options.combine
     ? combineRanges(ranges)
     : ranges
+}
+
+/**
+ * Manual trim to avoid string allocation.
+ * @private
+ */
+
+function manualTrim (str, start, end) {
+  // Skip leading whitespace
+  while (start < end) {
+    var code = str.charCodeAt(start)
+    if (code !== 32 && code !== 9) break // space and tab
+    start++
+  }
+
+  // Skip trailing whitespace
+  while (end > start) {
+    var code = str.charCodeAt(end - 1)
+    if (code !== 32 && code !== 9) break // space and tab
+    end--
+  }
+
+  return str.slice(start, end)
 }
 
 /**
