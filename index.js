@@ -101,8 +101,15 @@ function rangeParser (size, str, options) {
  */
 
 function parsePos (str) {
-  if (/^\d+$/.test(str)) return Number(str)
-  return NaN
+  // Fast path: check if all characters are digits using character codes
+  if (str.length === 0) return NaN
+  for (var i = 0; i < str.length; i++) {
+    var code = str.charCodeAt(i)
+    if (code < 48 || code > 57) {
+      return NaN
+    }
+  }
+  return Number(str)
 }
 
 /**
