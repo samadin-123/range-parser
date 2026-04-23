@@ -53,8 +53,37 @@ function rangeParser (size, str, options) {
     var startStr = manualTrim(arr[i], 0, indexOf)
     var endStr = manualTrim(arr[i], indexOf + 1, arr[i].length)
 
-    var start = parsePos(startStr)
-    var end = parsePos(endStr)
+    // Inline parsePos logic for start
+    var start = NaN
+    if (startStr.length > 0) {
+      var validStart = true
+      for (var j = 0; j < startStr.length; j++) {
+        var code = startStr.charCodeAt(j)
+        if (code < 48 || code > 57) {
+          validStart = false
+          break
+        }
+      }
+      if (validStart) {
+        start = Number(startStr)
+      }
+    }
+
+    // Inline parsePos logic for end
+    var end = NaN
+    if (endStr.length > 0) {
+      var validEnd = true
+      for (var k = 0; k < endStr.length; k++) {
+        var code2 = endStr.charCodeAt(k)
+        if (code2 < 48 || code2 > 57) {
+          validEnd = false
+          break
+        }
+      }
+      if (validEnd) {
+        end = Number(endStr)
+      }
+    }
 
     if (startStr.length === 0) {
       start = size - end
